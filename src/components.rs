@@ -13,7 +13,25 @@ pub struct Player;
 pub struct Enemy;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Item;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct AmuletOfYala;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Health {
+    pub current: i32,
+    pub max: i32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Name(pub String);
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ChasingPlayer;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct WantsToMove {
@@ -26,12 +44,3 @@ pub struct WantsToAttack {
     pub attacker: Entity,
     pub victim: Entity,
 }
-
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub struct Health {
-    pub current: i32,
-    pub max: i32,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub struct Name(pub String);

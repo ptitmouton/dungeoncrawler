@@ -29,7 +29,7 @@ pub fn player_input(
 
         let mut enemies = <(Entity, &Point)>::query().filter(component::<Enemy>());
 
-        let mut did_something = false;
+        // let mut did_something = false;
         if delta.x != 0 || delta.y != 0 {
             let mut hit_something = false;
             enemies
@@ -37,7 +37,7 @@ pub fn player_input(
                 .filter(|(_, pos)| **pos == destination)
                 .for_each(|(entity, _)| {
                     hit_something = true;
-                    did_something = true;
+                    // did_something = true;
                     commands.push((
                         (),
                         WantsToAttack {
@@ -48,7 +48,7 @@ pub fn player_input(
                 });
 
             if !hit_something {
-                did_something = true;
+                // did_something = true;
                 commands.push((
                     (),
                     WantsToMove {
@@ -59,15 +59,15 @@ pub fn player_input(
             }
         }
 
-        if !did_something {
-            if let Ok(mut health) = ecs
-                .entry_mut(player_entity)
-                .unwrap()
-                .get_component_mut::<Health>()
-            {
-                health.current = i32::min(health.max, health.current + 1);
-            }
-        }
+        // if !did_something {
+        //     if let Ok(mut health) = ecs
+        //         .entry_mut(player_entity)
+        //         .unwrap()
+        //         .get_component_mut::<Health>()
+        //     {
+        //         health.current = i32::min(health.max, health.current + 1);
+        //     }
+        // }
         *turn_state = TurnState::PlayerTurn;
     }
 }

@@ -20,20 +20,23 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Poin
         1..=8 => goblin(),
         _ => orc(),
     };
-    ecs.push((
-        Enemy,
-        pos,
-        MovingRandomly,
-        Name(name),
-        Health {
-            max: hp,
-            current: hp,
-        },
-        Render {
-            color: ColorPair::new(GREEN, RED),
-            glyph,
-        },
-    ));
+    let is_chasing_player = match rng.roll_dice(1, 10) {
+        1..=8 => true,
+        _ => false,
+    };
+    let health = Health {
+        max: hp,
+        current: hp,
+    };
+    let render = Render {
+        color: ColorPair::new(GREEN, RED),
+        glyph,
+    };
+    if is_chasing_player {
+        ecs.push((Enemy, pos, Name(name), health, ChasingPlayer, render));
+    } else {
+        ecs.push((Enemy, pos, Name(name), health, MovingRandomly, render));
+    }
 }
 
 pub fn goblin() -> (i32, String, FontCharType) {
@@ -42,4 +45,17 @@ pub fn goblin() -> (i32, String, FontCharType) {
 
 pub fn orc() -> (i32, String, FontCharType) {
     (2, String::from("Orc"), to_cp437('o'))
+}
+
+pub fn spawn_amulet_of_yala(ecs: &mut World, pos: Point) {
+    ecs.push((
+        Item,
+        AmuletOfYala,
+        pos,
+        Render {
+            color: ColorPair::new(WHITE, BLACK),
+            glyph: to_cp437('|'),
+        },
+        Name(String::from("Amulet of Yala")),
+    ));
 }
