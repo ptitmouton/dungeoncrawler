@@ -8,6 +8,7 @@ pub fn spawn_player(ecs: &mut World, pos: Point) {
             current: 10,
             max: 10,
         },
+        FieldOfView::new(8),
         Render {
             color: ColorPair::new(WHITE, BLACK),
             glyph: to_cp437('@'),
@@ -33,9 +34,25 @@ pub fn spawn_monster(ecs: &mut World, rng: &mut RandomNumberGenerator, pos: Poin
         glyph,
     };
     if is_chasing_player {
-        ecs.push((Enemy, pos, Name(name), health, ChasingPlayer, render));
+        ecs.push((
+            Enemy,
+            pos,
+            Name(name),
+            health,
+            ChasingPlayer,
+            FieldOfView::new(6),
+            render,
+        ));
     } else {
-        ecs.push((Enemy, pos, Name(name), health, MovingRandomly, render));
+        ecs.push((
+            Enemy,
+            pos,
+            Name(name),
+            health,
+            MovingRandomly,
+            FieldOfView::new(6),
+            render,
+        ));
     }
 }
 
