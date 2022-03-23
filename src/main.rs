@@ -48,6 +48,7 @@ impl State {
             .for_each(|pos| spawn_monster(&mut ecs, &mut rng, *pos));
 
         resources.insert(mb.map);
+        resources.insert(mb.theme);
         resources.insert(Camera::new(mb.player_start));
         resources.insert(TurnState::AwaitingInput);
 
@@ -73,6 +74,7 @@ impl State {
             .for_each(|pos| spawn_monster(&mut self.ecs, &mut rng, *pos));
 
         self.resources.insert(map_builder.map);
+        self.resources.insert(map_builder.theme);
         self.resources.insert(Camera::new(map_builder.player_start));
         self.resources.insert(TurnState::AwaitingInput);
     }
