@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 pub fn spawn_player(ecs: &mut World, pos: Point) {
     ecs.push((
-        Player,
+        Player { map_level: 0 },
         pos,
         Health {
             current: 10,
@@ -96,7 +96,7 @@ pub fn spawn_magic_mapper(ecs: &mut World, pos: Point) {
         pos,
         Render {
             color: ColorPair::new(WHITE, BLACK),
-            glyph: to_cp437('!'),
+            glyph: to_cp437('{'),
         },
         Name(String::from("Dungeon Map")),
         ProvidesDungeonMap,
