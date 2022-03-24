@@ -26,7 +26,18 @@ pub struct Health {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesHealing {
+    pub amount: i32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ProvidesDungeonMap;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MovingRandomly;
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Carried(pub Entity);
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Name(pub String);
@@ -41,6 +52,8 @@ pub struct FieldOfView {
     pub is_dirty: bool,
 }
 
+// Messages
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct WantsToMove {
     pub entity: Entity,
@@ -51,6 +64,12 @@ pub struct WantsToMove {
 pub struct WantsToAttack {
     pub attacker: Entity,
     pub victim: Entity,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct ActivateItem {
+    pub used_by: Entity,
+    pub item: Entity,
 }
 
 impl FieldOfView {
