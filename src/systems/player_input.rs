@@ -1,11 +1,12 @@
 use crate::prelude::*;
 
 #[system]
-#[read_component(Point)]
-#[read_component(Player)]
+#[read_component(Carried)]
 #[read_component(Enemy)]
 #[read_component(Item)]
-#[read_component(Carried)]
+#[read_component(Player)]
+#[read_component(Point)]
+#[read_component(Weapon)]
 #[write_component(Health)]
 pub fn player_input(
     ecs: &mut SubWorld,
@@ -20,7 +21,7 @@ pub fn player_input(
             VirtualKeyCode::Right => Point::new(1, 0),
             VirtualKeyCode::Up => Point::new(0, -1),
             VirtualKeyCode::Down => Point::new(0, 1),
-            VirtualKeyCode::Space => {
+            VirtualKeyCode::G => {
                 let (player, player_pos) = players
                     .iter(ecs)
                     .find_map(|(entity, pos)| Some((*entity, *pos)))
@@ -32,6 +33,17 @@ pub fn player_input(
                     .for_each(|(entity, _item, _item_pos)| {
                         commands.remove_component::<Point>(*entity);
                         commands.add_component(*entity, Carried(player));
+
+                        if let Ok(entity) = ecs.entry_ref(*entity) {
+                            if entity.get_component::<Weapon>().is_ok() {
+                                <(Entity, &Carried, &Weapon)>::query()
+                                    .iter(ecs)
+                                    .filter(|(_entity, carried, _weapon)| carried.0 == player)
+                                    .for_each(|(entity, _carried, _weapon)| {
+                                        commands.remove(*entity);
+                                    });
+                            }
+                        }
                     });
                 Point::zero()
             }

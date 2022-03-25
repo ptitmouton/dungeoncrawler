@@ -2,7 +2,7 @@ mod camera;
 mod components;
 mod map;
 mod map_builder;
-mod spawners;
+mod spawner;
 mod systems;
 mod turn_state;
 
@@ -19,7 +19,7 @@ mod prelude {
     pub use crate::components::*;
     pub use crate::map::*;
     pub use crate::map_builder::*;
-    pub use crate::spawners::*;
+    pub use crate::spawner::*;
     pub use crate::systems::*;
     pub use crate::turn_state::*;
 }
@@ -46,9 +46,7 @@ impl State {
         // spawn_amulet_of_yala(&mut ecs, mb.amulet_start);
         let exit_idx = mb.map.point2d_to_index(mb.amulet_start);
         mb.map.tiles[exit_idx] = TileType::Exit;
-        mb.monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut ecs, &mut rng, *pos));
+        spawn_level(&mut ecs, &mut rng, 0, &mb.monster_spawns);
 
         resources.insert(mb.map);
         resources.insert(mb.theme);
@@ -73,10 +71,7 @@ impl State {
         // spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
         let exit_idx = map_builder.map.point2d_to_index(map_builder.amulet_start);
         map_builder.map.tiles[exit_idx] = TileType::Exit;
-        map_builder
-            .monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, *pos));
+        spawn_level(&mut self.ecs, &mut rng, 0, &map_builder.monster_spawns);
 
         self.resources.insert(map_builder.map);
         self.resources.insert(map_builder.theme);
@@ -191,10 +186,12 @@ impl State {
             map_builder.map.tiles[exit_idx] = TileType::Exit;
         }
 
-        map_builder
-            .monster_spawns
-            .iter()
-            .for_each(|pos| spawn_entity(&mut self.ecs, &mut rng, *pos));
+        spawn_level(
+            &mut self.ecs,
+            &mut rng,
+            map_level as usize,
+            &map_builder.monster_spawns,
+        );
         self.resources.insert(map_builder.map);
         self.resources.insert(map_builder.theme);
         self.resources.insert(Camera::new(map_builder.player_start));
